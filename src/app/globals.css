@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* Dark mode via class strategy (required for next-themes) */
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* ─────────────────────────────────────────────
+   LIGHT MODE TOKENS
+───────────────────────────────────────────── */
+:root {
+  --bg: #ffffff;
+  --surface: #f2f7fa;
+  --text: #0c1b26;
+  --muted: #5a7a8c;
+  --border: #d0e4ee;
+  --accent: #1b6b8c;
+  --accent-hover: #155a77;
+
+  --left-bg: #eef5f9;
+  --left-text: #0c1b26;
+  --left-muted: #476878;
+  --left-accent: #1b6b8c;
+  --left-border: #cddde8;
+  --right-bg: #ffffff;
+
+  /* Aurora blob colors — subtle in light mode */
+  --aurora-1: rgba(27, 107, 140, 0.10);
+  --aurora-2: rgba(59, 158, 192, 0.07);
+  --aurora-3: rgba(14,  74, 101, 0.06);
+
+  /* Dot grid */
+  --dot-col: rgba(27, 107, 140, 0.18);
+
+  /* Right panel radial glow */
+  --right-glow: rgba(27, 107, 140, 0.04);
+}
+
+/* ─────────────────────────────────────────────
+   DARK MODE TOKENS
+───────────────────────────────────────────── */
+.dark {
+  --bg: #0b1220;
+  --surface: #121d2e;
+  --text: #e8f2f8;
+  --muted: #6a96ac;
+  --border: #1e3348;
+  --accent: #3b9ec0;
+  --accent-hover: #2d8aaa;
+
+  --left-bg: #0d1623;
+  --left-text: #e8f2f8;
+  --left-muted: #6a96ac;
+  --left-accent: #3b9ec0;
+  --left-border: #1a2e42;
+  --right-bg: #111a2a;
+
+  /* Aurora blob colors — vivid in dark mode */
+  --aurora-1: rgba(27, 107, 140, 0.34);
+  --aurora-2: rgba(59, 158, 192, 0.22);
+  --aurora-3: rgba(14,  74, 101, 0.18);
+
+  --dot-col: rgba(59, 158, 192, 0.07);
+  --right-glow: rgba(59, 158, 192, 0.05);
+}
+
+/* ─────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────── */
+html, body { height: 100%; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+/* ─────────────────────────────────────────────
+   AURORA BACKGROUND  (ReactBits Aurora)
+───────────────────────────────────────────── */
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.aurora-1 {
+  width: 58%; height: 52%;
+  top: -14%; left: -8%;
+  background: radial-gradient(circle at 40% 40%, var(--aurora-1), transparent 70%);
+  animation: aurora-drift-1 18s ease-in-out infinite;
+}
+.aurora-2 {
+  width: 48%; height: 58%;
+  bottom: -12%; right: -2%;
+  background: radial-gradient(circle at 60% 60%, var(--aurora-2), transparent 70%);
+  animation: aurora-drift-2 22s ease-in-out infinite reverse;
+}
+.aurora-3 {
+  width: 38%; height: 44%;
+  top: 38%; left: 22%;
+  background: radial-gradient(circle at 50% 50%, var(--aurora-3), transparent 70%);
+  animation: aurora-drift-3 15s ease-in-out infinite;
+}
+
+@keyframes aurora-drift-1 {
+  0%,  100% { transform: translate(0, 0)     scale(1.00); }
+  33%        { transform: translate(4%, 8%)   scale(1.07); }
+  66%        { transform: translate(-3%, 3%)  scale(0.94); }
+}
+@keyframes aurora-drift-2 {
+  0%,  100% { transform: translate(0, 0)      scale(1.05); }
+  40%        { transform: translate(-6%, -5%) scale(0.91); }
+  70%        { transform: translate(5%, 4%)   scale(1.11); }
+}
+@keyframes aurora-drift-3 {
+  0%,  100% { transform: translate(0, 0)     scale(1.00); }
+  50%        { transform: translate(6%, -7%) scale(1.09); }
+}
+
+/* ─────────────────────────────────────────────
+   DOT-GRID OVERLAY  (ReactBits DotGrid)
+───────────────────────────────────────────── */
+.dot-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--dot-col) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* ─────────────────────────────────────────────
+   SHINY LABEL TEXT  (ReactBits ShinyText)
+───────────────────────────────────────────── */
+.shiny-text {
+  background: linear-gradient(
+    100deg,
+    var(--left-accent) 0%,
+    color-mix(in srgb, var(--left-accent) 55%, white) 40%,
+    var(--left-accent) 70%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: text-shine 3.4s linear infinite;
+}
+@keyframes text-shine {
+  to { background-position: 220% center; }
+}
+
+/* ─────────────────────────────────────────────
+   SHIMMER BUTTON  (UIverse shimmer sweep)
+───────────────────────────────────────────── */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    108deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.55s ease;
+}
+.shimmer-btn:hover::after {
+  transform: translateX(120%);
+}
+
+/* ─────────────────────────────────────────────
+   FOCUSED INPUT
+───────────────────────────────────────────── */
+.glow-input:focus {
+  outline: none;
+  border-color: var(--accent) !important;
+}
+
+/* ─────────────────────────────────────────────
+   GLASS CARD
+───────────────────────────────────────────── */
+.glass-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--right-bg) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+/* ─────────────────────────────────────────────
+   STEP DOTS PULSE
+───────────────────────────────────────────── */
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM SCROLLBAR
+───────────────────────────────────────────── */
+.custom-scroll::-webkit-scrollbar { width: 4px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 99px;
+}
+
+/* ─────────────────────────────────────────────
+   CONFIRM CHECK ANIMATION
+───────────────────────────────────────────── */
+@keyframes check-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1.0); opacity: 1; }
+}
+.check-pop { animation: check-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
