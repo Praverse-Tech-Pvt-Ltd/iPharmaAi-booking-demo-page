@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { BookingForm } from './BookingForm'
 import Lightfall from './Lightfall'
@@ -33,8 +32,6 @@ const heroItem = {
 
 export function SplitLayout() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
 
   return (
     <div className="flex min-h-[100dvh] w-full flex-col lg:flex-row">
@@ -48,7 +45,7 @@ export function SplitLayout() {
         <div className="pointer-events-none absolute inset-0">
           <Lightfall
             colors={
-              mounted && theme !== 'dark'
+              theme !== 'dark'
                 ? ['#1b6b8c', '#0e4a65', '#2a8aaa']
                 : ['#3b9ec0', '#1b6b8c', '#2a8aaa']
             }
@@ -57,7 +54,7 @@ export function SplitLayout() {
             streakCount={1}
             streakWidth={0.7}
             streakLength={1.6}
-            glow={mounted && theme !== 'dark' ? 1.0 : 0.85}
+            glow={theme !== 'dark' ? 1.0 : 0.85}
             density={0.5}
             twinkle={0}
             zoom={2.5}
@@ -80,25 +77,14 @@ export function SplitLayout() {
 
         {/* Navbar */}
         <nav className="relative z-10 flex items-center justify-between px-8 py-5">
-          {mounted ? (
-            <Image
-              src={theme === 'dark' ? '/logo-white.png' : '/logo-blue.png'}
-              alt="iPharmaAI"
-              width={160}
-              height={40}
-              className="h-9 w-auto object-contain"
-              priority
-            />
-          ) : (
-            <Image
-              src="/logo-blue.png"
-              alt="iPharmaAI"
-              width={160}
-              height={40}
-              className="h-9 w-auto object-contain"
-              priority
-            />
-          )}
+          <Image
+            src={theme === 'dark' ? '/logo-white.png' : '/logo-blue.png'}
+            alt="iPharmaAI"
+            width={160}
+            height={40}
+            className="h-9 w-auto object-contain"
+            priority
+          />
 
           {/* Theme toggle — pill style */}
           <button
@@ -111,7 +97,7 @@ export function SplitLayout() {
               backgroundColor: 'color-mix(in srgb, var(--left-bg) 70%, var(--left-border))',
             }}
           >
-            {mounted && theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
           </button>
         </nav>
 

@@ -208,7 +208,6 @@ const Lightfall = ({
   const meshRef = useRef<Mesh | null>(null);
   const geometryRef = useRef<Triangle | null>(null);
   const rendererRef = useRef<Renderer | null>(null);
-  const mouseTargetRef = useRef<[number, number]>([0, 0]);
   const lastTimeRef = useRef<number>(0);
 
   useEffect(() => {

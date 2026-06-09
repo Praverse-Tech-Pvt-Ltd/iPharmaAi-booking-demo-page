@@ -69,15 +69,22 @@ export function BookingCalendar({ onConfirm, name, isLoading }: Props) {
   useEffect(() => {
     if (!selectedDate) return
     const dateKey = toDateKey(selectedDate)
-    setAvailLoading(true)
-    setBookedSlots(new Set())
-    fetch(`/api/availability?date=${dateKey}`)
-      .then(r => r.json())
-      .then(data => {
+
+    async function loadAvailability() {
+      setAvailLoading(true)
+      setBookedSlots(new Set())
+      try {
+        const res = await fetch(`/api/availability?date=${dateKey}`)
+        const data = await res.json()
         if (data.bookedSlots) setBookedSlots(new Set(data.bookedSlots))
-      })
-      .catch(() => {/* silently ignore — all slots available */})
-      .finally(() => setAvailLoading(false))
+      } catch {
+        // Silently ignore availability errors and leave all slots open.
+      } finally {
+        setAvailLoading(false)
+      }
+    }
+
+    void loadAvailability()
   }, [selectedDate])
 
   const prevMonth = () => setCurrentMonth(new Date(year, month - 1, 1))

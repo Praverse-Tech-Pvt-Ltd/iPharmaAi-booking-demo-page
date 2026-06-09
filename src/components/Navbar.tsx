@@ -2,13 +2,10 @@
 
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
 
   return (
     <nav
@@ -20,27 +17,16 @@ export function Navbar() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <a href="/" className="flex items-center">
-          {mounted ? (
-            <Image
-              src={theme === 'dark' ? '/logo-white.png' : '/logo-blue.png'}
-              alt="iPharmaAI"
-              width={180}
-              height={48}
-              className="h-10 w-auto object-contain"
-              priority
-            />
-          ) : (
-            <Image
-              src="/logo-blue.png"
-              alt="iPharmaAI"
-              width={180}
-              height={48}
-              className="h-10 w-auto object-contain"
-              priority
-            />
-          )}
-        </a>
+        <Link href="/" className="flex items-center">
+          <Image
+            src={theme === 'dark' ? '/logo-white.png' : '/logo-blue.png'}
+            alt="iPharmaAI"
+            width={180}
+            height={48}
+            className="h-10 w-auto object-contain"
+            priority
+          />
+        </Link>
 
         {/* Theme toggle */}
         <button
@@ -49,7 +35,7 @@ export function Navbar() {
           className="flex h-9 w-9 items-center justify-center rounded-full border transition-colors hover:opacity-80"
           style={{ borderColor: 'var(--border)', backgroundColor: 'var(--surface)' }}
         >
-          {mounted && theme === 'dark' ? (
+          {theme === 'dark' ? (
             <SunIcon />
           ) : (
             <MoonIcon />
