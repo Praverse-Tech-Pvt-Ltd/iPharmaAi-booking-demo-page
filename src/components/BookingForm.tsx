@@ -7,6 +7,25 @@ import { BookingCalendar } from './BookingCalendar'
 type Step = 'email' | 'details' | 'calendar' | 'confirmed'
 
 const STEPS: Step[] = ['email', 'details', 'calendar']
+const COUNTRIES = ['India', 'USA', 'UK', 'Canada', 'Germany']
+const SERVICES = [
+  '483 Observations',
+  'cGMP Six Systems',
+  'Investigators',
+  'Top 20 Recurring Issues',
+  'GMPC Module',
+  'Warning Letter',
+  'ANDA CTD Smart Template',
+  'ANDA Review Checklist',
+  'White Paper (Strategic Paper)',
+  'Controlled Correspondence',
+  'DMF Checklist',
+  'Validation Checklist',
+  'ANDA Facility Template',
+  'API Facility Template',
+  'IIG Proportionality',
+  'Clearance, Size, Shape & Score Comparison',
+]
 
 function to12h(time: string): string {
   const [h, m] = time.split(':').map(Number)
@@ -20,62 +39,94 @@ function toDateKey(d: Date): string {
 
 const stepVariants = {
   initial: { opacity: 0, y: 14, filter: 'blur(5px)' },
-  animate: { opacity: 1, y: 0,  filter: 'blur(0px)' },
-  exit:    { opacity: 0, y: -10, filter: 'blur(5px)' },
+  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  exit: { opacity: 0, y: -10, filter: 'blur(5px)' },
 }
 const stepTransition = { type: 'spring' as const, stiffness: 260, damping: 28 }
 
 export function BookingForm() {
   const [step, setStep] = useState<Step>('email')
-  const [email, setEmail]           = useState('')
-  const [firstName, setFirstName]   = useState('')
-  const [lastName, setLastName]     = useState('')
-  const [phone, setPhone]           = useState('')
-  const [company, setCompany]       = useState('')
+  const [email, setEmail] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [country, setCountry] = useState('')
+  const [mobile, setMobile] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [companyDomain, setCompanyDomain] = useState('')
+  const [service, setService] = useState('')
+  const [question, setQuestion] = useState('')
   const [emailError, setEmailError] = useState('')
   const [bookingError, setBookingError] = useState('')
-  const [isBooking, setIsBooking]   = useState(false)
+  const [isBooking, setIsBooking] = useState(false)
   const [confirmedDate, setConfirmedDate] = useState<Date | null>(null)
   const [confirmedTime, setConfirmedTime] = useState<string | null>(null)
-  const [teamsUrl, setTeamsUrl]     = useState<string | null>(null)
+  const [meetingUrl, setMeetingUrl] = useState<string | null>(null)
 
   const emailRef = useRef<HTMLInputElement>(null)
-  const firstRef = useRef<HTMLInputElement>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (step === 'email')   emailRef.current?.focus()
-    if (step === 'details') firstRef.current?.focus()
+    if (step === 'email') emailRef.current?.focus()
+    if (step === 'details') nameRef.current?.focus()
   }, [step])
 
-  const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!validateEmail(email)) { setEmailError('Please enter a valid work email.'); return }
+  const handleEmailSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid work email.')
+      return
+    }
     setEmailError('')
     setStep('details')
   }
 
-  const handleDetailsSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!firstName.trim() || !lastName.trim()) return
+  const handleDetailsSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const hasRequiredDetails =
+      fullName.trim() &&
+      country &&
+      mobile.trim() &&
+      companyName.trim() &&
+      companyDomain.trim() &&
+      service &&
+      question.trim()
+
+    if (!hasRequiredDetails) return
     setStep('calendar')
   }
 
   const handleConfirm = async (date: Date, time: string) => {
+    const nameParts = fullName.trim().split(/\s+/)
+    const firstName = nameParts[0] ?? ''
+    const lastName = nameParts.slice(1).join(' ') || '-'
+
     setIsBooking(true)
     setBookingError('')
     try {
       const res = await fetch('/api/book', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, lastName, email, phone, company, date: toDateKey(date), time }),
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          fullName,
+          email,
+          phone: mobile,
+          country,
+          company: companyName,
+          companyDomain,
+          service,
+          question,
+          date: toDateKey(date),
+          time,
+        }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Booking failed. Please try again.')
       setConfirmedDate(date)
       setConfirmedTime(time)
-      setTeamsUrl(data.teamsUrl ?? null)
+      setMeetingUrl(data.meetingUrl ?? null)
       setStep('confirmed')
     } catch (err) {
       setBookingError(err instanceof Error ? err.message : 'Something went wrong.')
@@ -86,13 +137,19 @@ export function BookingForm() {
 
   const resetForm = () => {
     setStep('email')
-    setEmail(''); setFirstName(''); setLastName('')
-    setPhone(''); setCompany(''); setTeamsUrl(null)
+    setEmail('')
+    setFullName('')
+    setCountry('')
+    setMobile('')
+    setCompanyName('')
+    setCompanyDomain('')
+    setService('')
+    setQuestion('')
+    setMeetingUrl(null)
     setBookingError('')
   }
 
-  const fullName = `${firstName} ${lastName}`.trim() || 'there'
-
+  const displayName = fullName.trim() || 'there'
   const baseInput = {
     className: 'glow-input w-full rounded-xl border px-4 py-3 text-sm outline-none transition-colors',
     style: { borderColor: 'var(--border)', backgroundColor: 'var(--surface)', color: 'var(--text)' },
@@ -100,19 +157,17 @@ export function BookingForm() {
 
   return (
     <div className="w-full">
-
-      {/* ── Progress dots ── */}
       <div className="mb-6 flex items-center gap-2">
         {STEPS.map((s, i) => {
-          const done   = step === 'confirmed' || STEPS.indexOf(step) > i
+          const done = step === 'confirmed' || STEPS.indexOf(step) > i
           const active = step === s
           return (
             <motion.div
               key={s}
               animate={{
-                width:           active ? 28 : 8,
+                width: active ? 28 : 8,
                 backgroundColor: done || active ? 'var(--accent)' : 'var(--border)',
-                opacity:         done ? 0.6 : 1,
+                opacity: done ? 0.6 : 1,
               }}
               transition={{ type: 'spring', stiffness: 300, damping: 28 }}
               style={{ height: 4, borderRadius: 99 }}
@@ -121,7 +176,6 @@ export function BookingForm() {
         })}
       </div>
 
-      {/* ── Heading ── */}
       <AnimatePresence mode="wait">
         <motion.h2
           key={`heading-${step}`}
@@ -132,14 +186,11 @@ export function BookingForm() {
           className="mb-1 text-[1.85rem] font-bold tracking-tight"
           style={{ color: 'var(--text)' }}
         >
-          {step === 'confirmed' ? "You’re booked!" : 'Book your demo'}
+          {step === 'confirmed' ? "You're booked!" : 'Book your demo'}
         </motion.h2>
       </AnimatePresence>
 
-      {/* ── Step content ── */}
       <AnimatePresence mode="wait">
-
-        {/* STEP 1 — Email */}
         {step === 'email' && (
           <motion.form
             key="email"
@@ -151,15 +202,15 @@ export function BookingForm() {
             onSubmit={handleEmailSubmit}
             className="mt-6 flex flex-col gap-4"
           >
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: 'var(--muted)' }}>
-                Work email
-              </label>
+            <Field label="Work email">
               <input
                 ref={emailRef}
                 type="email"
                 value={email}
-                onChange={e => { setEmail(e.target.value); setEmailError('') }}
+                onChange={e => {
+                  setEmail(e.target.value)
+                  setEmailError('')
+                }}
                 placeholder="you@pharmacy.com"
                 autoComplete="email"
                 {...baseInput}
@@ -168,16 +219,13 @@ export function BookingForm() {
                   borderColor: emailError ? '#ef4444' : 'var(--border)',
                 }}
               />
-              {emailError && (
-                <motion.p
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-xs text-red-500"
-                >
-                  {emailError}
-                </motion.p>
-              )}
-            </div>
+            </Field>
+
+            {emailError && (
+              <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-red-500">
+                {emailError}
+              </motion.p>
+            )}
 
             <motion.button
               type="submit"
@@ -198,7 +246,6 @@ export function BookingForm() {
           </motion.form>
         )}
 
-        {/* STEP 2 — Details */}
         {step === 'details' && (
           <motion.form
             key="details"
@@ -210,61 +257,57 @@ export function BookingForm() {
             onSubmit={handleDetailsSubmit}
             className="mt-6 flex flex-col gap-4"
           >
-            {/* Locked email row */}
-            <div
-              className="flex items-center justify-between rounded-xl border px-4 py-2.5"
-              style={{ borderColor: 'var(--border)', backgroundColor: 'var(--surface)' }}
-            >
-              <span className="text-sm" style={{ color: 'var(--text)' }}>{email}</span>
-              <button type="button" onClick={() => setStep('email')} className="text-xs underline underline-offset-2" style={{ color: 'var(--muted)' }}>
-                Change
-              </button>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Field label="Full Name *">
+                <input ref={nameRef} type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Enter your full name" required {...baseInput} />
+              </Field>
+
+              <Field label="Email *">
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" required {...baseInput} />
+              </Field>
+
+              <Field label="Country *">
+                <select value={country} onChange={e => setCountry(e.target.value)} required {...baseInput}>
+                  <option value="">Select Country</option>
+                  {COUNTRIES.map(item => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
+                </select>
+              </Field>
+
+              <Field label="Mobile Number *">
+                <input type="tel" value={mobile} onChange={e => setMobile(e.target.value)} placeholder="Enter mobile number" required {...baseInput} />
+              </Field>
+
+              <Field label="Company Name *">
+                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Enter company name" required {...baseInput} />
+              </Field>
+
+              <Field label="Company Domain *">
+                <input type="text" value={companyDomain} onChange={e => setCompanyDomain(e.target.value)} placeholder="Enter company domain" required {...baseInput} />
+              </Field>
             </div>
 
-            {/* Welcome badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 22, delay: 0.1 }}
-              className="flex items-center gap-2"
-            >
-              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--accent)', animation: 'dot-pulse 2s ease-in-out infinite' }} />
-              <p className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
-                Welcome — let&apos;s schedule your call.
-              </p>
-            </motion.div>
+            <Field label="Services *">
+              <select value={service} onChange={e => setService(e.target.value)} required {...baseInput}>
+                <option value="">Select Service</option>
+                {SERVICES.map(item => (
+                  <option key={item} value={item}>{item}</option>
+                ))}
+              </select>
+            </Field>
 
-            {/* Name row */}
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { ref: firstRef, value: firstName, onChange: setFirstName, placeholder: 'Priya',   label: 'First name' },
-                { ref: undefined, value: lastName,  onChange: setLastName,  placeholder: 'Sharma', label: 'Last name' },
-              ].map(({ ref, value, onChange, placeholder, label }) => (
-                <div key={label} className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium" style={{ color: 'var(--muted)' }}>{label}</label>
-                  <input
-                    ref={ref}
-                    type="text"
-                    value={value}
-                    onChange={e => onChange(e.target.value)}
-                    placeholder={placeholder}
-                    required
-                    {...baseInput}
-                    className="glow-input w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-colors"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium" style={{ color: 'var(--muted)' }}>Phone number</label>
-              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+1 (312) 847-1928" {...baseInput} />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium" style={{ color: 'var(--muted)' }}>Pharmacy / Company</label>
-              <input type="text" value={company} onChange={e => setCompany(e.target.value)} placeholder="Riverside Pharmacy" {...baseInput} />
-            </div>
+            <Field label="Your Question *">
+              <textarea
+                value={question}
+                onChange={e => setQuestion(e.target.value)}
+                placeholder="Tell us about your requirements..."
+                required
+                rows={4}
+                {...baseInput}
+                className="glow-input min-h-24 w-full resize-none rounded-xl border px-4 py-3 text-sm outline-none transition-colors"
+              />
+            </Field>
 
             <motion.button
               type="submit"
@@ -278,7 +321,6 @@ export function BookingForm() {
           </motion.form>
         )}
 
-        {/* STEP 3 — Calendar */}
         {step === 'calendar' && (
           <motion.div
             key="calendar"
@@ -293,16 +335,15 @@ export function BookingForm() {
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-3 rounded-xl border border-red-300/60 bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:border-red-800/60 dark:text-red-300"
+                className="mb-3 rounded-xl border border-red-300/60 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800/60 dark:bg-red-950/40 dark:text-red-300"
               >
                 {bookingError}
               </motion.div>
             )}
-            <BookingCalendar onConfirm={handleConfirm} name={fullName} isLoading={isBooking} />
+            <BookingCalendar onConfirm={handleConfirm} name={displayName} isLoading={isBooking} />
           </motion.div>
         )}
 
-        {/* STEP 4 — Confirmed */}
         {step === 'confirmed' && confirmedDate && confirmedTime && (
           <motion.div
             key="confirmed"
@@ -313,15 +354,12 @@ export function BookingForm() {
             transition={stepTransition}
             className="mt-6 flex flex-col items-center gap-6 text-center"
           >
-            {/* Animated check */}
             <motion.div
               initial={{ scale: 0.4, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: 'spring', stiffness: 220, damping: 18, delay: 0.1 }}
               className="flex h-16 w-16 items-center justify-center rounded-full"
-              style={{
-                backgroundColor: 'color-mix(in srgb, var(--accent) 14%, transparent)',
-              }}
+              style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 14%, transparent)' }}
             >
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--accent)' }}>
                 <polyline points="20 6 9 17 4 12" />
@@ -340,18 +378,18 @@ export function BookingForm() {
             </div>
 
             <div
-              className="w-full rounded-xl border p-4 text-left flex flex-col gap-3"
+              className="flex w-full flex-col gap-3 rounded-xl border p-4 text-left"
               style={{ borderColor: 'var(--border)', backgroundColor: 'var(--surface)' }}
             >
               {[
-                { icon: <CalIcon />,   label: confirmedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) },
-                { icon: <ClockIcon />, label: `${to12h(confirmedTime)} · 30 minutes` },
-                { icon: <TeamsIcon />, label: teamsUrl ? undefined : 'MS Teams link in your calendar invite', link: teamsUrl ?? undefined },
+                { icon: <CalIcon />, label: confirmedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) },
+                { icon: <ClockIcon />, label: `${to12h(confirmedTime)} - 30 minutes` },
+                { icon: <TeamsIcon />, label: meetingUrl ? undefined : 'Video link in your calendar invite', link: meetingUrl ?? undefined },
               ].map(({ icon, label, link }) => (
                 <div key={label ?? link} className="flex items-center gap-3 text-sm" style={{ color: 'var(--muted)' }}>
                   <span style={{ color: 'var(--accent)' }}>{icon}</span>
                   {link
-                    ? <a href={link} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2" style={{ color: 'var(--accent)' }}>Join Microsoft Teams</a>
+                    ? <a href={link} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2" style={{ color: 'var(--accent)' }}>Join video call</a>
                     : label}
                 </div>
               ))}
@@ -362,8 +400,16 @@ export function BookingForm() {
             </button>
           </motion.div>
         )}
-
       </AnimatePresence>
+    </div>
+  )
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-xs font-semibold" style={{ color: 'var(--text)' }}>{label}</label>
+      {children}
     </div>
   )
 }
@@ -375,12 +421,15 @@ function ArrowRight() {
     </svg>
   )
 }
+
 function CalIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
 }
+
 function ClockIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
 }
+
 function TeamsIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
 }
