@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# iPharmaAI Booking Demo Page
 
-## Getting Started
+Next.js booking page for scheduling an iPharmaAI/Audit Mind demo. The flow collects request-demo details, lets the visitor pick a time slot, emails the visitor a confirmation with an `.ics` calendar invite, and sends the booking details to the host mailbox.
 
-First, run the development server:
+## Requirements
+
+- Node.js 20+
+- npm
+- SMTP access for the booking host mailbox
+
+## Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create a local environment file:
+
+```bash
+copy .env.local.example .env.local
+```
+
+3. Fill in `.env.local`:
+
+```env
+SMTP_HOST=smtp.office365.com
+SMTP_PORT=587
+BOOKING_HOST_EMAIL=icretools@icretegy.com
+BOOKING_HOST_PASSWORD=your-mailbox-password
+BOOKING_FROM_EMAIL=iPharmaAI Demos <icretools@icretegy.com>
+```
+
+## Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Vercel Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Add these environment variables in Vercel before deploying:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `BOOKING_HOST_EMAIL`
+- `BOOKING_HOST_PASSWORD`
+- `BOOKING_FROM_EMAIL`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The current app uses generated Jitsi meeting links and email calendar invites. The availability endpoint returns all slots as open until a real calendar integration is connected.

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Without Graph calendar access there's no real schedule to check against,
-// so every slot is reported open. Swap this for a Graph getSchedule call
-// (see src/lib/graph.ts) once Azure admin consent is granted.
+// There is no live calendar integration yet, so every slot is reported open.
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const date = searchParams.get('date')

@@ -75,7 +75,7 @@ export function SplitLayout() {
         {/* Dot-grid overlay */}
         <div className="dot-grid" />
 
-        {/* Navbar */}
+        {/* Header */}
         <nav className="relative z-10 flex items-center justify-between px-8 py-5">
           <Image
             src="/ipharmaAi Logo (Blue).png"
