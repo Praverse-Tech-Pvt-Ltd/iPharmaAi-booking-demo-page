@@ -6,9 +6,9 @@ import './globals.css'
 const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Book a Demo | iPharmaAI',
+  title: 'Book a Demo | Audit Mind',
   description:
-    'See iPharmaAI in action. Schedule a 30-minute demo and discover how AI can transform your pharmacy.',
+    'See Audit Mind in action. Schedule a 30-minute demo and discover how AI can transform your pharmacy.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

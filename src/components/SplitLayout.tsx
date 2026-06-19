@@ -78,11 +78,19 @@ export function SplitLayout() {
         {/* Navbar */}
         <nav className="relative z-10 flex items-center justify-between px-8 py-5">
           <Image
-            src={theme === 'dark' ? '/logo-white.png' : '/logo-blue.png'}
-            alt="iPharmaAI"
+            src="/ipharmaAi Logo (Blue).png"
+            alt="Audit Mind"
             width={160}
             height={40}
-            className="h-9 w-auto object-contain"
+            className="h-[48px] w-auto object-contain dark:hidden"
+            priority
+          />
+          <Image
+            src="/ipharmaAi Logo (White).png"
+            alt="Audit Mind"
+            width={160}
+            height={40}
+            className="hidden h-[39px] w-auto object-contain dark:block"
             priority
           />
 
@@ -128,7 +136,7 @@ export function SplitLayout() {
               <span
                 style={{ color: 'var(--left-accent)' }}
               >
-                iPharmaAI
+                Audit Mind
               </span>
               <br />in action.
             </motion.h1>
@@ -140,7 +148,7 @@ export function SplitLayout() {
               style={{ color: 'var(--left-muted)' }}
             >
               Get a full product walkthrough with our team.
-              You&apos;ll know in 10 minutes if iPharmaAI is
+              You&apos;ll know in 10 minutes if Audit Mind is
               right for your pharmacy.
             </motion.p>
 

@@ -19,11 +19,19 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src={theme === 'dark' ? '/logo-white.png' : '/logo-blue.png'}
-            alt="iPharmaAI"
+            src="/ipharmaAi Logo (Blue).png"
+            alt="Audit Mind"
             width={180}
             height={48}
-            className="h-10 w-auto object-contain"
+            className="h-[52px] w-auto object-contain dark:hidden"
+            priority
+          />
+          <Image
+            src="/ipharmaAi Logo (White).png"
+            alt="Audit Mind"
+            width={180}
+            height={48}
+            className="hidden h-[42px] w-auto object-contain dark:block"
             priority
           />
         </Link>

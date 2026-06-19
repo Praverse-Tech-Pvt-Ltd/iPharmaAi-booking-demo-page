@@ -65,11 +65,11 @@ export async function POST(req: NextRequest) {
     })
 
     const icsContent = buildIcs({
-      uid: `ipharmaai-demo-${Date.now()}@icretegy.com`,
+      uid: `auditmind-demo-${Date.now()}@icretegy.com`,
       start: startDt,
       end: endDt,
-      summary: `iPharmaAI Demo - ${attendeeName}`,
-      description: `30-minute iPharmaAI product walkthrough.\nJoin video call: ${meetingUrl}`,
+      summary: `Audit Mind Demo - ${attendeeName}`,
+      description: `30-minute Audit Mind product walkthrough.\nJoin video call: ${meetingUrl}`,
       location: meetingUrl,
       organizerEmail: BOOKING_EMAIL,
       attendeeEmail: email,
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
   <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;padding:40px;border:1px solid #d0e4ee;">
     <h2 style="color:#1b6b8c;margin-top:0;">Your demo is confirmed</h2>
     <p style="color:#0c1b26;">Hi ${firstName},</p>
-    <p style="color:#5a7a8c;">You're all set for your <strong style="color:#0c1b26;">30-minute iPharmaAI product walkthrough</strong>.</p>
+    <p style="color:#5a7a8c;">You're all set for your <strong style="color:#0c1b26;">30-minute Audit Mind product walkthrough</strong>.</p>
     <div style="background:#f4f8fa;border-radius:8px;padding:16px;margin:24px 0;">
       <p style="margin:0 0 8px;color:#5a7a8c;font-size:13px;"><strong style="color:#0c1b26;">${dateLabel}</strong></p>
       <p style="margin:0 0 8px;color:#5a7a8c;font-size:13px;"><strong style="color:#0c1b26;">${timeLabel} UTC - 30 minutes</strong></p>
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
     ${service ? `<p style="color:#5a7a8c;font-size:13px;"><strong style="color:#0c1b26;">Requested service:</strong> ${service}</p>` : ''}
     ${question ? `<p style="color:#5a7a8c;font-size:13px;"><strong style="color:#0c1b26;">Your question:</strong> ${question}</p>` : ''}
     <p style="color:#5a7a8c;font-size:13px;">A calendar invite is attached to this email. If you need to reschedule, reply to this email.</p>
-    <p style="color:#5a7a8c;font-size:12px;margin-bottom:0;">- The iPharmaAI Team</p>
+    <p style="color:#5a7a8c;font-size:12px;margin-bottom:0;">- The Audit Mind Team</p>
   </div>
 </body>
 </html>
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
 
     await sendEmail({
       to: { email, name: attendeeName },
-      subject: 'Your iPharmaAI Demo is Confirmed!',
+      subject: 'Your Audit Mind Demo is Confirmed!',
       html: confirmationHtml,
       icsContent,
     })
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
     `
 
     await sendEmail({
-      to: { email: BOOKING_EMAIL, name: 'iPharmaAI Team' },
+      to: { email: BOOKING_EMAIL, name: 'Audit Mind Team' },
       subject: `New demo booking — ${attendeeName}`,
       html: notifyHtml,
       icsContent,

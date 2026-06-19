@@ -28,7 +28,7 @@ export function buildIcs({
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//iPharmaAI//Booking//EN',
+    'PRODID:-//AuditMind//Booking//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:REQUEST',
     'BEGIN:VEVENT',
@@ -39,7 +39,7 @@ export function buildIcs({
     `SUMMARY:${escapeText(summary)}`,
     `DESCRIPTION:${escapeText(description)}`,
     location ? `LOCATION:${escapeText(location)}` : '',
-    `ORGANIZER;CN=iPharmaAI:mailto:${organizerEmail}`,
+    `ORGANIZER;CN=Audit Mind:mailto:${organizerEmail}`,
     `ATTENDEE;CN=${escapeText(attendeeName)};RSVP=TRUE:mailto:${attendeeEmail}`,
     'STATUS:CONFIRMED',
     'SEQUENCE:0',

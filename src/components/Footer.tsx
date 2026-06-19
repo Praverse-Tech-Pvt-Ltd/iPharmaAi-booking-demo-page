@@ -8,18 +8,18 @@ export function Footer() {
         {/* Logo + tagline */}
         <div className="flex flex-col items-center gap-2 md:items-start">
           <Image
-            src="/logo-blue.png"
-            alt="iPharmaAI"
+            src="/ipharmaAi Logo (Blue).png"
+            alt="Audit Mind"
             width={140}
             height={36}
             className="h-8 w-auto object-contain dark:hidden"
           />
           <Image
-            src="/logo-white.png"
-            alt="iPharmaAI"
+            src="/ipharmaAi Logo (White).png"
+            alt="Audit Mind"
             width={140}
             height={36}
-            className="hidden h-8 w-auto object-contain dark:block"
+            className="hidden h-[26px] w-auto object-contain dark:block"
           />
           <p className="text-sm" style={{ color: 'var(--muted)' }}>Transforming pharmacy with AI</p>
         </div>
@@ -28,12 +28,12 @@ export function Footer() {
         <nav className="flex flex-wrap justify-center gap-6 text-sm" style={{ color: 'var(--muted)' }}>
           <a href="#" className="transition-colors hover:text-[var(--accent)]">Privacy Policy</a>
           <a href="#" className="transition-colors hover:text-[var(--accent)]">Terms of Service</a>
-          <a href="mailto:hello@ipharmaai.com" className="transition-colors hover:text-[var(--accent)]">Contact</a>
+          <a href="mailto:hello@auditmind.com" className="transition-colors hover:text-[var(--accent)]">Contact</a>
         </nav>
 
         {/* Copyright */}
         <p className="text-xs" style={{ color: 'var(--muted)' }}>
-          &copy; {new Date().getFullYear()} iPharmaAI. All rights reserved.
+          &copy; {new Date().getFullYear()} Audit Mind. All rights reserved.
         </p>
       </div>
     </footer>

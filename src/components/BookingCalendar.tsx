@@ -115,7 +115,7 @@ export function BookingCalendar({ onConfirm, name, isLoading }: Props) {
         </div>
         <div>
           <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{name}</p>
-          <p className="text-xs" style={{ color: 'var(--muted)' }}>iPharmaAI Demo · 30 min · MS Teams</p>
+          <p className="text-xs" style={{ color: 'var(--muted)' }}>Audit Mind Demo · 30 min · MS Teams</p>
         </div>
       </div>
 

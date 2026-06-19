@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useTheme } from 'next-themes'
 
-const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || 'https://calendly.com/ipharmaai/demo'
+const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || 'https://calendly.com/auditmind/demo'
 
 export function CalendlyEmbed() {
   const { theme } = useTheme()

@@ -71,11 +71,11 @@ export function HeroSection() {
               style={{ color: 'var(--text)' }}
             >
               See{' '}
-              <span style={{ color: 'var(--accent)' }}>iPharmaAI</span>
+              <span style={{ color: 'var(--accent)' }}>Audit Mind</span>
               {' '}in action.
             </h1>
             <p className="text-lg leading-relaxed" style={{ color: 'var(--muted)' }}>
-              30 minutes with our team. You&apos;ll know in 10 minutes if iPharmaAI
+              30 minutes with our team. You&apos;ll know in 10 minutes if Audit Mind
               is right for your pharmacy.
             </p>
           </div>
