@@ -33,7 +33,13 @@ async function main() {
       user: process.env.BOOKING_HOST_EMAIL,
       pass: process.env.BOOKING_HOST_PASSWORD,
     },
+    logger: true,
+    debug: true,
   })
+
+  console.log(`Mailbox user being authenticated: "${process.env.BOOKING_HOST_EMAIL}", password length: ${(process.env.BOOKING_HOST_PASSWORD || '').length}`)
+  await transporter.verify()
+  console.log('Connection + AUTH verified OK — server accepted the login.')
 
   console.log(`Sending test mail to ${to} via ${process.env.SMTP_HOST}:${process.env.SMTP_PORT} as ${process.env.BOOKING_HOST_EMAIL}...`)
 

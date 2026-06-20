@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BookingCalendar } from './BookingCalendar'
+import { isPersonalEmail } from '@/lib/workEmail'
 
 type Step = 'email' | 'details' | 'calendar' | 'confirmed'
 
@@ -12,19 +13,15 @@ const SERVICES = [
   '483 Observations',
   'cGMP Six Systems',
   'Investigators',
-  'Top 20 Recurring Issues',
-  'GMPC Module',
   'Warning Letter',
-  'ANDA CTD Smart Template',
-  'ANDA Review Checklist',
+  'ANDA Submission Support (CTD + Checklist)',
+  'Facility Templates (ANDA/API)',
   'White Paper (Strategic Paper)',
   'Controlled Correspondence',
   'DMF Checklist',
-  'Validation Checklist',
-  'ANDA Facility Template',
-  'API Facility Template',
-  'IIG Proportionality',
-  'Clearance, Size, Shape & Score Comparison',
+  'Validation & Compliance Checklist',
+  'General Product Demo',
+  'Custom / Not Sure Yet',
 ]
 
 function to12h(time: string): string {
@@ -75,6 +72,10 @@ export function BookingForm() {
     event.preventDefault()
     if (!validateEmail(email)) {
       setEmailError('Please enter a valid work email.')
+      return
+    }
+    if (isPersonalEmail(email)) {
+      setEmailError('Please use your work email, not a personal email.')
       return
     }
     setEmailError('')

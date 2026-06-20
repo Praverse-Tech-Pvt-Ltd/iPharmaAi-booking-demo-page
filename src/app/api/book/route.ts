@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/email'
 import { createMeetingUrl } from '@/lib/meeting'
 import { buildIcs } from '@/lib/ics'
+import { isPersonalEmail } from '@/lib/workEmail'
 
 const BOOKING_EMAIL = process.env.BOOKING_HOST_EMAIL || 'icretools@icretegy.com'
 
@@ -41,6 +42,10 @@ export async function POST(req: NextRequest) {
 
     if (!firstName || !lastName || !email || !date || !time) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
+    }
+
+    if (isPersonalEmail(email)) {
+      return NextResponse.json({ error: 'Please use your work email, not a personal email.' }, { status: 400 })
     }
 
     const [year, month, day] = date.split('-').map(Number)
