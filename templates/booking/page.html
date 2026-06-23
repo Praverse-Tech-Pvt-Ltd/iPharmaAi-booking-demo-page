@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="split-layout">
+
+  <!-- ── LEFT PANEL ── -->
+  <div class="left-panel">
+    <div id="lightfall-container"></div>
+    <div class="text-area-fade"></div>
+    <div class="dot-grid"></div>
+
+    <nav class="navbar">
+      <img class="logo-blue" src="{% static 'img/ipharmaai-logo-blue.png' %}" alt="Audit Mind">
+      <img class="logo-white" src="{% static 'img/ipharmaai-logo-white.png' %}" alt="Audit Mind">
+
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-inner">
+        <p class="hero-label shiny-text fade-in-up" style="animation-delay: 0.05s">30-minute product walkthrough</p>
+
+        <h1 class="hero-heading fade-in-up" style="animation-delay: 0.1s">
+          See <span class="accent">Audit Mind</span><br>in action.
+        </h1>
+
+        <p class="hero-subtext fade-in-up" style="animation-delay: 0.15s">
+          Get a full product walkthrough with our team.
+          You'll know in 10 minutes if Audit Mind is right for your pharmacy.
+        </p>
+
+        <ul class="benefits-list fade-in-up" style="animation-delay: 0.2s">
+          {% for benefit in benefits %}
+          <li>
+            <span class="benefit-check">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+            {{ benefit }}
+          </li>
+          {% endfor %}
+        </ul>
+
+        <div class="social-proof fade-in-up" style="animation-delay: 0.25s">
+          <div class="avatar-stack">
+            <div style="background-color:#1b6b8c;">R</div>
+            <div style="background-color:#2a8aaa;">M</div>
+            <div style="background-color:#3b9ec0;">A</div>
+          </div>
+          <div class="social-proof-text">
+            <span class="pulse-dot"></span>
+            <p>Trusted by <strong>pharmacies</strong> across the country</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="right-panel">
+    <div class="right-vignette"></div>
+
+    <div class="right-panel-inner">
+      <div class="step-dots" id="step-dots">
+        <div class="step-dot" data-dot="email"></div>
+        <div class="step-dot" data-dot="details"></div>
+        <div class="step-dot" data-dot="calendar"></div>
+      </div>
+
+      <h2 class="step-heading" id="step-heading">Book your demo</h2>
+
+      <!-- STEP 1: email -->
+      <form class="step" data-step="email" id="step-email">
+        <div class="field">
+          <label for="email-input">Work email</label>
+          <input class="input glow-input" type="email" id="email-input" placeholder="you@pharmacy.com" autocomplete="email" required>
+        </div>
+        <p class="error-text" id="email-error" hidden></p>
+        <button type="submit" class="shimmer-btn btn-primary">
+          Get Started
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+        </button>
+        <p class="privacy-text">We respect your privacy. By submitting, you agree to our <a href="#">privacy policy</a>.</p>
+      </form>
+
+      <!-- STEP 2: details -->
+      <form class="step" data-step="details" id="step-details">
+        <div class="field-grid">
+          <div class="field">
+            <label for="fullname-input">Full Name *</label>
+            <input class="input glow-input" type="text" id="fullname-input" placeholder="Enter your full name" required>
+          </div>
+          <div class="field">
+            <label for="email-input-2">Email *</label>
+            <input class="input glow-input" type="email" id="email-input-2" placeholder="Enter your email" required>
+          </div>
+          <div class="field">
+            <label for="country-input">Country *</label>
+            <select class="input glow-input" id="country-input" required>
+              <option value="">Select Country</option>
+              {% for country in countries %}
+              <option value="{{ country }}">{{ country }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label for="mobile-input">Mobile Number *</label>
+            <input class="input glow-input" type="tel" id="mobile-input" placeholder="Enter mobile number" required>
+          </div>
+          <div class="field">
+            <label for="company-input">Company Name *</label>
+            <input class="input glow-input" type="text" id="company-input" placeholder="Enter company name" required>
+          </div>
+          <div class="field">
+            <label for="company-domain-input">Company Domain *</label>
+            <input class="input glow-input" type="text" id="company-domain-input" placeholder="Enter company domain" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="service-input">Services *</label>
+          <select class="input glow-input" id="service-input" required>
+            <option value="">Select Service</option>
+            {% for service in services %}
+            <option value="{{ service }}">{{ service }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="question-input">Your Question *</label>
+          <textarea class="input glow-input" id="question-input" rows="4" placeholder="Tell us about your requirements..." required></textarea>
+        </div>
+
+        <button type="submit" class="shimmer-btn btn-primary">
+          Schedule a demo
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+        </button>
+      </form>
+
+      <!-- STEP 3: calendar -->
+      <div class="step" data-step="calendar" id="step-calendar">
+        <p class="booking-error-banner" id="booking-error" hidden></p>
+        <div id="calendar-root"></div>
+      </div>
+
+      <!-- STEP 4: confirmed -->
+      <div class="step" data-step="confirmed" id="step-confirmed">
+        <div class="confirmed-step">
+          <div class="confirmed-check check-pop">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+
+          <div>
+            <p class="confirmed-title" id="confirmed-title">See you soon</p>
+            <p class="confirmed-sub" id="confirmed-sub"></p>
+          </div>
+
+          <div class="confirmed-card">
+            <div class="confirmed-card-row">
+              <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></span>
+              <span id="confirmed-date"></span>
+            </div>
+            <div class="confirmed-card-row">
+              <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg></span>
+              <span id="confirmed-time"></span>
+            </div>
+            <div class="confirmed-card-row">
+              <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>
+              <span id="confirmed-meeting"></span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-link" id="book-another-btn">Book another demo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

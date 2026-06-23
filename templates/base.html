@@ -1,0 +1,32 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Book a Demo | Audit Mind{% endblock %}</title>
+  <meta name="description" content="See Audit Mind in action. Schedule a 30-minute demo and discover how AI can transform your pharmacy.">
+
+  <!-- FOUC-safe theme bootstrap — must run before first paint -->
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  {% block content %}{% endblock %}
+
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/lightfall.js' %}"></script>
+  <script src="{% static 'js/booking-form.js' %}"></script>
+</body>
+</html>
